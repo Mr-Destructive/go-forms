@@ -1,0 +1,18 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+*.out
+
+# vendor/
+
+# Go workspace file
+go.work
+
+
+*.db
