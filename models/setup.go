@@ -15,6 +15,8 @@ func ConnectDatabase() {
   }
 
   database.AutoMigrate(&Forms{})
+  database.AutoMigrate(&Question{})
+  database.AutoMigrate(&Options{})
 
   DB = database
 }
