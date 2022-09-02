@@ -39,23 +39,17 @@ func CreateQuestions(c *gin.Context) {
   }
 
   var option_list []models.Options
-  var option_ref models.Options
-  var question_ref models.Question
-  log.Print(strings.Split(input.OptionID, ","))
   for _, option := range strings.Split(input.OptionID, ","){
-    log.Print(question_ref.Option)
     if o, err := strconv.Atoi(option); err == nil {
-      log.Print(models.DB.Select("question_id").Where("id= ?", o).First(&models.Options{}))
-      err := models.DB.Where("id= ?", o).Preload("Option").First(&question_ref).Error
-      log.Print(option_ref.Question_ID)
+      var option_ref models.Options
+      err := models.DB.Where("id= ?", o).First(&option_ref).Error
       if err != nil {
         log.Panic(err)
       }
-      option_list = append(option_list, question_ref.Option...)
-      log.Print(option_list)
+      option_list = append(option_list, option_ref)
+      //question_ref.Option...)
      }
   }
-  log.Print(option_list)
   Questions := models.Question{Question: input.Question, Option: option_list}
   models.DB.Create(&Questions)
 
@@ -85,7 +79,20 @@ func UpdateQuestions(c *gin.Context) {
     return
   }
 
-  models.DB.Model(&Questions).Updates(input)
+  var option_list []models.Options
+  for _, option := range strings.Split(input.OptionID, ","){
+    if o, err := strconv.Atoi(option); err == nil {
+      var option_ref models.Options
+      err := models.DB.Where("id= ?", o).First(&option_ref).Error
+      if err != nil {
+        log.Panic(err)
+      }
+      option_list = append(option_list, option_ref)
+      //question_ref.Option...)
+     }
+  }
+
+  models.DB.Model(&Questions).Updates(models.Question{Question: input.Question, Option: option_list})
 
   c.JSON(http.StatusOK, gin.H{"data": Questions})
 }
