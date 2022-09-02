@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 type Forms struct {
   gorm.Model
-  ID     uint   `json:"id" gorm:"primary_key"`
+  //ID     uint   `json:"id" gorm:"primary_key"`
   Title string `json:"title"`
   Description string `json:"description"`
   Question []Question 
@@ -12,14 +12,14 @@ type Forms struct {
 
 type Question struct {
   gorm.Model
-  ID uint `json:"id" gorm:"primary_key"`
+  //ID uint `json:"id" gorm:"primary_key"`
   Question string `json:"question_name"`
   Form_ID uint `json:"form_id"`
   Option []Options 
 }
 
 type Options struct {
-  ID uint `json:"id" gorm:"primary_key"`
+  //ID uint `json:"id" gorm:"primary_key"`
   Option_text string `json:"option"`
   Is_correct bool `json:"is_correct"`
   Question_ID uint `json:"question_id"`

@@ -3,6 +3,9 @@ package api
 import(
 	"go_forms/models"
   "net/http"
+  "strconv"
+  "strings"
+  "log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +37,19 @@ func CreateForms(c *gin.Context) {
     return
   }
 
-  Forms := models.Forms{Title: input.Title, Description: input.Description}
+
+  var question_list []models.Question
+  for _, question := range strings.Split(input.QuestionID, ","){
+    if o, err := strconv.Atoi(question); err == nil {
+      var question_ref models.Question
+      err := models.DB.Where("id= ?", o).First(&question_ref).Error
+      if err != nil {
+        log.Panic(err)
+      }
+      question_list = append(question_list, question_ref)
+     }
+  }
+  Forms := models.Forms{Title: input.Title, Description: input.Description, Question: question_list}
   models.DB.Create(&Forms)
 
   c.JSON(http.StatusOK, gin.H{"data": Forms})
@@ -63,7 +78,19 @@ func UpdateForms(c *gin.Context) {
     return
   }
 
-  models.DB.Model(&Forms).Updates(input)
+  var question_list []models.Question
+  for _, question := range strings.Split(input.QuestionID, ","){
+    if o, err := strconv.Atoi(question); err == nil {
+      var question_ref models.Question
+      err := models.DB.Where("id= ?", o).First(&question_ref).Error
+      if err != nil {
+        log.Panic(err)
+      }
+      question_list = append(question_list, question_ref)
+     }
+  }
+
+  models.DB.Model(&Forms).Updates(models.Forms{Title: input.Title, Description: input.Description, Question: question_list})
 
   c.JSON(http.StatusOK, gin.H{"data": Forms})
 }
