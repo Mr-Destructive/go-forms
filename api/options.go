@@ -1,8 +1,9 @@
 package api
 
-import(
+import (
 	"go_forms/models"
-  "net/http"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,10 +30,19 @@ func GetOptions(c *gin.Context) {
 
 func CreateOptions(c *gin.Context) {
   var input models.Create_Option_Input
-  if err := c.ShouldBindJSON(&input); err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-    return
+
+  if input.Option_text == ""{
+    if c.PostForm("is_correct") == "true"{
+      input.Is_correct = true
+    } else if c.PostForm("is_correct") == "false" {
+      input.Is_correct = false
+    }
+    input.Option_text = c.PostForm("option")
   }
+  //if err := c.ShouldBindJSON(&input); err != nil {
+  //  c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+  //  return
+  //}
 
   Options := models.Options{Option_text: input.Option_text}
   models.DB.Create(&Options)

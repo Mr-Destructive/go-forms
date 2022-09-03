@@ -32,13 +32,17 @@ func GetForms(c *gin.Context) {
 
 func CreateForms(c *gin.Context) {
   var input models.Create_Form_Input
-  if err := c.ShouldBindJSON(&input); err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-    return
+  if c.PostForm("title") != "" && c.PostForm("description") != "" {
+    input.Title = c.PostForm("title")
+    input.Description = c.PostForm("description")
+    input.QuestionID = c.PostForm("question_ids")
   }
+  //if err := c.ShouldBindJSON(&input); err != nil {
+  //  log.Print(err.Error())
+  //  c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+  //  return
+  //}
 
-
-  log.Print(input)
   var question_list []models.Question
   for _, question := range strings.Split(input.QuestionID, ","){
     if o, err := strconv.Atoi(question); err == nil {
@@ -52,12 +56,14 @@ func CreateForms(c *gin.Context) {
   }
   Forms := models.Forms{Title: input.Title, Description: input.Description, Question: question_list}
   models.DB.Create(&Forms)
-  for _, q := range question_list{
-    var Questions models.Question
-    if err := models.DB.Where("id= ?", q.ID).First(&Questions).Error; err != nil{
-      return 
+  if question_list != nil{
+    for _, q := range question_list{
+      var Questions models.Question
+      if err := models.DB.Where("id= ?", q.ID).First(&Questions).Error; err != nil{
+        return 
+      }
+      models.DB.Model(&Questions).Updates(models.Question{Form_ID: Forms.ID})
     }
-    models.DB.Model(&Questions).Updates(models.Question{Form_ID: Forms.ID})
   }
 
   c.JSON(http.StatusOK, gin.H{"data": Forms})

@@ -1,7 +1,17 @@
-
-    <form>
-    <label for="option">Option
-    <input name="option" type="text" >
-    </label>
-    <button type="submit">Create</button>
-    </form>
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+<script src="https://unpkg.com/htmx.org@1.8.0"></script>
+<div id="optiondata">
+<form method="post">
+<label for="option">Option
+<input name="option" type="text" >
+<label for="is_correct">Is Correct
+ <select id="is_correct" name="is_correct">
+      <option value="true">Correct Value</option>
+      <option value="false" selected>Incorrect Value</option>
+    </select>
+</label>
+<button type="submit" hx-post="/options/create"
+  hx-target="#optiondata" 
+  hx-swap="innerHTML">Create</button>
+</form>
+</div>

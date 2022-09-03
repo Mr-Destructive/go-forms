@@ -1,14 +1,23 @@
-
-    <form>
+<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon"> 
+<script src="https://unpkg.com/htmx.org@1.8.0"></script>
+<div id="questiondata">
+  <form method="post">
     <label for="question">Question
-    <input name="question" type="text" >
+      <input name="question" type="text" >
+    </label>
+    <label for="option_ids">
+      <input name="option_ids" type="text" >
     </label>
     <div id="options">
     </div>
     <div hx-target="#options" hx-swap="beforeend">
       <label>Add Option
-      <button hx-get="/add-option">+</button>
+        <button hx-get="/add-option">+</button>
       </label>
     </div>
-    <button type="submit">Create</button>
-    </form>
+    <button type="submit" 
+      hx-post="/questions/create" 
+      hx-target="#questiondata" 
+      hx-swap="innerHTML">Create</button>
+  </form>
+</div>

@@ -43,10 +43,14 @@ func GetQuestions(c *gin.Context) {
 
 func CreateQuestions(c *gin.Context) {
   var input models.Create_Question_Input
-  if err := c.ShouldBindJSON(&input); err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-    return
+  if input.OptionID != "" || input.Question == "" {
+    input.Question = c.PostForm("question")
+    input.OptionID = c.PostForm("option_ids")
   }
+  //if err := c.ShouldBindJSON(&input); err != nil {
+  //  c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+  //  return
+  //}
 
   var option_list []models.Options
   for _, option := range strings.Split(input.OptionID, ","){

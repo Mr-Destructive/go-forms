@@ -19,3 +19,4 @@ func Add_Question(c *gin.Context) {
 func Add_Option(c *gin.Context) {
   c.HTML(http.StatusOK, "option_form.html", gin.H{})
 }
+
