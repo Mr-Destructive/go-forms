@@ -15,10 +15,10 @@ func Fetch_Forms() []models.Forms{
   return Forms
 }
 
-func Fetch_Forms_Index(title string) models.Forms{
+func Fetch_Forms_Index(id string) models.Forms{
   var Forms models.Forms
 
-  err := models.DB.Where("Title= ?", title).Find(&Forms).Error
+  err := models.DB.Where("id= ?", id).Find(&Forms).Error
       if err != nil {
         panic(err)
       }
@@ -38,6 +38,7 @@ func CreateForms(c *gin.Context) {
   }
 
 
+  log.Print(input)
   var question_list []models.Question
   for _, question := range strings.Split(input.QuestionID, ","){
     if o, err := strconv.Atoi(question); err == nil {
@@ -51,13 +52,19 @@ func CreateForms(c *gin.Context) {
   }
   Forms := models.Forms{Title: input.Title, Description: input.Description, Question: question_list}
   models.DB.Create(&Forms)
+  for _, q := range question_list{
+    var Questions models.Question
+    if err := models.DB.Where("id= ?", q.ID).First(&Questions).Error; err != nil{
+      return 
+    }
+    models.DB.Model(&Questions).Updates(models.Question{Form_ID: Forms.ID})
+  }
 
   c.JSON(http.StatusOK, gin.H{"data": Forms})
 }
 
 func IndexForms(c *gin.Context) {
  var Forms models.Forms
-
   if err := models.DB.Where("Title= ?", c.Param("title")).First(&Forms).Error; err != nil {
     c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
     return
@@ -82,6 +89,11 @@ func UpdateForms(c *gin.Context) {
   for _, question := range strings.Split(input.QuestionID, ","){
     if o, err := strconv.Atoi(question); err == nil {
       var question_ref models.Question
+      var Questions models.Question
+      if err := models.DB.Where("id= ?", o).First(&Questions).Error; err != nil{
+        return 
+      }
+      models.DB.Model(&Questions).Updates(models.Question{Form_ID: Forms.ID})
       err := models.DB.Where("id= ?", o).First(&question_ref).Error
       if err != nil {
         log.Panic(err)

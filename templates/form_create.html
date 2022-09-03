@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Go Forms</title>
+    <script src="https://unpkg.com/htmx.org@1.8.0"></script>
+  </head>
+  <body>
+    <form>
+    <label for="title">Title
+    <input name="title" type="text" >
+    </label>
+    <label for="description">Description
+    <input name="description" type="text" >
+    </label>
+    <button type="submit" hx-post="/forms/create">Create</button>
+    </form>
+    <label for="question_ids">
+    <input name="question_ids"  >
+    </label>
+    <div id="questions">
+    </div>
+    <div hx-target="#questions" hx-swap="beforeend" > 
+      <button hx-get="/add-question">+</button>
+    </div>
+  </body>
+</html>

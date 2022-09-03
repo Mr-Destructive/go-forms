@@ -7,7 +7,7 @@ type Forms struct {
   //ID     uint   `json:"id" gorm:"primary_key"`
   Title string `json:"title"`
   Description string `json:"description"`
-  Question []Question 
+  Question []Question `json:"question_list"`
 }
 
 type Question struct {
@@ -15,7 +15,7 @@ type Question struct {
   //ID uint `json:"id" gorm:"primary_key"`
   Question string `json:"question_name"`
   Form_ID uint `json:"form_id"`
-  Option []Options 
+  Option []Options `json:"option_list"`
 }
 
 type Options struct {

@@ -16,6 +16,16 @@ func Fetch_Questions() []models.Question{
   return Questions
 }
 
+func Fetch_Question_Forms(id int) []models.Question{
+  var Questions []models.Question
+
+  err := models.DB.Where("form_id= ?", id).Find(&Questions).Error
+  if err != nil {
+    panic(err)
+  }
+  return Questions
+}
+
 func Fetch_Questions_Index(question string) models.Question{
   var Questions models.Question
 

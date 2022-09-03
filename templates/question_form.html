@@ -1,0 +1,14 @@
+
+    <form>
+    <label for="question">Question
+    <input name="question" type="text" >
+    </label>
+    <div id="options">
+    </div>
+    <div hx-target="#options" hx-swap="beforeend">
+      <label>Add Option
+      <button hx-get="/add-option">+</button>
+      </label>
+    </div>
+    <button type="submit">Create</button>
+    </form>
