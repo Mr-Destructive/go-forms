@@ -6,11 +6,11 @@
       <input name="question" type="text" >
     </label>
     <label for="option_ids">
-      <input name="option_ids" type="text" >
+      <input name="option_ids" id="option_ids" type="text" >
     </label>
     <div id="options">
     </div>
-    <div hx-target="#options" hx-swap="beforeend">
+    <div hx-target="#options" hx-swap="afterend">
       <label>Add Option
         <button hx-get="/add-option">+</button>
       </label>

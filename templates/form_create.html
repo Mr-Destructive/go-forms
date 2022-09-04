@@ -16,13 +16,13 @@
       <label for="question_ids">
         <input name="question_ids" >
       </label>
-      <button type="submit" hx-post="/forms/create" hx-target="#formdata" hx-swap="innerHTML">Create</button>
-    </form>
+      <button type="submit" hx-post="/create-form" hx-target="#formdata" hx-swap="innerHTML">Create</button>
     <div id="questions">
     </div>
     <div hx-target="#questions" hx-swap="beforeend"> 
       <button hx-get="/add-question">+</button>
     </div>
+    </form>
   </div>
   </body>
 </html>
